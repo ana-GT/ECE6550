@@ -1,0 +1,689 @@
+% LINEAR SYSTEMS AND CONTROL
+% Homework 4 : 
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphics} 
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{mathtools}
+
+\usepackage{trfsigns}
+\author{Ana Huaman}
+\title{\textbf{Homework 4} \\ ECE 6550: Linear Control and Systems}
+\date{}
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Question 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+Let
+
+\[
+\dot{x} =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+x+ 
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+u
+\]
+
+where $\alpha \neq \beta + 1$
+
+\subsection*{a}
+Is this system completely controllable?
+
+\subsection*{Solution}
+Since our system is LTI, we calculate $\Gamma$ to check if the system is controllable:
+
+\[
+\Gamma = 
+\begin{bmatrix}
+B & AB
+\end{bmatrix}
+\]
+
+\[
+\Gamma = 
+\begin{bmatrix}
+1 & \alpha \\
+1 & \beta + 1 
+\end{bmatrix}
+\]
+
+For the system to be C.C., we need $\mathcal{R}(\Gamma) = n = 2$, which is equivalent to verify that the determinant of $\Gamma$ is a non-zero value. Calculating this we get	:
+
+\[
+\left |
+\begin{matrix}
+1 & \alpha \\
+1 & \beta + 1
+\end{matrix}
+\right | = 
+\beta +1-\alpha
+\]
+
+Since we have as information that $\alpha \neq \beta + 1$, we can conclude that the determinant is a non-zero value, which means that our system \textbf{is completely controllable}
+
+\subsection*{b}
+Find, if possible, $K$ such that $u = -Kx$ places the poles (eigenvalues) of the closed-loop system in $\lambda=-1 \pm 5j$
+
+So, let's calculate our $\mathcal{X}_{A-BK}$:
+
+\[ A-BK =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+- 
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}
+\begin{bmatrix}
+K_{1} & K_{2}
+\end{bmatrix}
+\]
+
+\[ A-BK =
+\begin{bmatrix}
+\alpha - K_{1} & -K_{2} \\
+\beta - K_{1} & 1 - K_{2}
+\end{bmatrix}
+\]
+
+Finding its characteristic equation:
+
+\begin{equation}
+\mathcal{X}_{A-BK} = \lambda ^{2} + (K_{1} + K_{2} - 1 - \alpha) \lambda + ( \alpha - K_{1} +(\beta - \alpha)K_{2} )
+\label{Eq:P1-CE-ABK}
+\end{equation}
+
+We want our system to have poles $\lambda=-1 \pm 5j$, so we wish our characteristic equation to be:
+\begin{equation}
+\mathcal{X}_{-1 \pm 5j} = \lambda^{2} + 2 \lambda + 26
+\label{Eq:P1-CE-Lambda}
+\end{equation}
+
+The coefficients of (\ref{Eq:P1-CE-ABK}) and (\ref{Eq:P1-CE-Lambda}) must be equal, so we get two equations
+\[
+\begin{matrix}
+K_{1} + K_{2} - 1 - \alpha = 2 \\
+\alpha - K_{1} +(\beta - \alpha)K_{2} = 26
+\end{matrix}
+\]
+
+Solving for $K_{1}$ and $K_{2}$ we get:
+\begin{center}
+\fbox{
+$\begin{matrix*}[l]
+K_{1} = (\alpha + 3) - \dfrac{29}{\beta - \alpha + 1} \\
+K_{2} = \dfrac{29}{\beta - \alpha + 1}
+\end{matrix*}$ }
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Question 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+Now, use the same system as in Question 1 but assume that we have an output
+
+\[ y = 
+\begin{bmatrix}
+2 & 0
+\end{bmatrix}
+x
+\]
+
+\subsection*{a}
+Is the system completely observable?
+\subsection*{Solution}
+Let's analyze the Observability matrix ($\Omega$):
+\[  
+\Omega = 
+\begin{bmatrix}
+C \\ CA
+\end{bmatrix}
+\]
+
+\[  
+\Omega = 
+\begin{bmatrix}
+2 & 0 \\ 
+2\alpha & 0
+\end{bmatrix}
+\]
+
+We can easily see that $\mathcal{R}(\Omega) = 1$ (look that pretty column of zeros), hence, our system is \textbf{not completely observable}
+
+\subsection*{b}
+Find, if possible, the output feedback $u = -Ly$ such that the poles (Eigenvalues)  of the closed-loop estimation error dynamics ($\dot{e} = (A-LC)e$) are $\lambda_{1} = -1$, $\lambda_{2} = -2$
+
+\subsection*{Solution}
+Since our system is not completely observable, we cannot place the poles freely. Still, let's see what happens if we try to adjust the system to the poles given. We might get lucky and find matching poles, but that is not a sure thing.
+\medskip
+
+\[ L = 
+\begin{bmatrix}
+L_{1}\\
+L_{2}
+\end{bmatrix}
+ \]
+
+\[
+A - LC =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+-
+\begin{bmatrix}
+L_{1}\\
+L_{2}
+\end{bmatrix}
+\begin{bmatrix}
+2 & 0 \\
+\end{bmatrix}
+\]
+
+\[
+A - LC =
+\begin{bmatrix}
+\alpha - 2L_{1} & 0 \\
+\beta- 2L_{2} & 1
+\end{bmatrix}
+\]
+
+Finding the characteristic equation:
+
+\begin{equation}
+\mathcal{X}_{A-LC} = \lambda ^{2} + ( -1 -(\alpha -2L_{1}) ) \lambda + ( \alpha - 2L_{1} )
+\label{Eq:P2-CE-ALC}
+\end{equation}
+
+We want our system to have poles $\lambda_{1} = -1, \lambda_{2} = -2$, so we wish our characteristic equation to be:
+\begin{equation}
+\mathcal{X}_{-1,-2} = \lambda^{2} + 3 \lambda + 2
+\label{Eq:P2-CE-Lambda}
+\end{equation}
+
+Making the coefficients of (\ref{Eq:P2-CE-ALC}) equal to (\ref{Eq:P2-CE-Lambda}) we get:
+
+\[ 
+\begin{matrix*}[l]
+-1 - (\alpha - 2L_{1}) = 3 \rightarrow L_{1} = \dfrac{\alpha + 4}{2} \\
+\alpha - 2L_{1} = 2 \rightarrow L_{1} = \dfrac{\alpha - 2}{2}
+\end{matrix*}
+\]
+
+No way. We \textbf{cannot} find a $L_{1}$ that solves both equations. Also, we can see that $L_{2}$ does not appear in these equations, so we are actually trying to set the poles only with the $L_{1}$ value. 
+\medskip
+
+So, our conclusion is:
+\begin{center}
+\fbox{For this system, we \textbf{cannot} design an estimator according with the especified poles given}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Question 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+Let $A$, $B$, $C$ be given as in Questions 1.2.
+
+\subsection*{a}
+Find the controllable decomposition of this system
+
+\subsection*{Solution}
+A controllable decomposition is a similarity transform, which in turns converts $A$, $B$ to:
+
+\[ \hat{A} = T^{-1}AT \]
+\[ \hat{B} = T^{-1}BT \]
+
+where $T$ columns are one of the basis of $\Gamma$ (Controllability matrix). Since we saw in Problem 1 that $\mathcal{R}(\Gamma) = 2$, we can safely pick the easiest basis for $\Gamma$:
+
+\begin{center}
+\fbox{
+$\mathcal{R}(\Gamma) =
+span 
+\left \{ 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\right \} $}
+\end{center}
+ 
+
+which covers the complete space of $\Re^{2}$. Then, oh surprise we get a $T$ as:
+\[
+T = 
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\]
+
+which is the identity $I$. So, if we make the multiplications $T^{-1}AT$ and $T^{-1}B$ we will get the same matrices $A$ and $B$, which is not surprising actually, since our matrix is completely controllable, so actually $\hat{A}_{11} = A$, $\hat{A}_{12}$  and $\hat{A}_{22}$ do not exist, and $\hat{B}_{1} = B$, where $(\hat{A}_{11}, \hat{B}_{1}) = (A,B)$ is Completely controllable
+\medskip
+
+So, to wrap this up we end up getting our \textbf{controllable decomposition} as:
+
+\[ \hat{A}_{11} = A =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+\]
+
+\[ \hat{B}_{1} = B =
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+\]
+
+\subsection*{b}
+Let $A$, $B$, $C$ be given as in Question 1.2. Find the Observable decomposition of this system
+
+\subsection*{Solution}
+Now, here we know from Question 2 that our system is not completely observable (Actually we know that the $\mathcal{R}(\Omega) = 1$). Here, similarly to the case above, we need to find  a similarity transformation $T$ in which its first columns are a basis for $\mathcal{N}(\Omega)^{\perp}$ and its last columns are the basis for $\mathcal{N}(\Omega)$.
+
+Remember $\Omega$? Well I do not, so let's see it again:
+
+\[
+\Omega =
+\begin{bmatrix}
+2 & 0 \\
+2\alpha & 0
+\end{bmatrix}
+\]
+
+So, let's start with the basis for $\mathcal{N}(\Omega)$. For that one we have:
+
+\[
+\mathcal{N}(\Omega) : 
+\left \{ 
+\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}
+\right \}
+\rightarrow
+\begin{bmatrix}
+2 & 0 \\
+2\alpha & 0
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0
+\end{bmatrix}
+\]
+
+\[
+\begin{bmatrix}
+2x_{1} \\
+2\alpha x_{1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0
+\end{bmatrix}
+\]
+\[
+\rightarrow
+x_{1} = 0 
+\]
+
+\begin{center}
+\fbox{
+$\mathcal{N}(\Omega) : 
+span \left \{ 
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\right \} $ }
+\end{center}
+Analogously we can find $\mathcal{N^{\perp}}(\Omega)$ , since it is orthogonal to $\mathcal{N}(\Omega)$
+
+\begin{center}
+\fbox{
+$\mathcal{N}^{\perp}(\Omega) : 
+span \left \{ 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\right \} $ }
+\end{center}
+
+Forming $T$ with these results we find as columns, oh surprise again (first the vector of $\mathcal{N}^{\perp}$ and then $\mathcal{N}$):
+
+\[
+T =
+\begin{bmatrix}
+1 & 0  \\
+0 & 1
+\end{bmatrix}
+\]
+
+
+Identity matrix again! So, if we apply this transformation to our system, we will end up with the system in the same form! Just in case, where the quick math:
+
+\[ \hat{A} = T^{-1}AT = I^{-1}AI = IAI = A \]
+\[ \hat{C} = CT^{-1} = CI^{-1} = CI = C \]
+
+From this we conclude that \textbf{our system is already in its Observable decomposition}. Which actually is easy to see, since we can see a big $0$ in the top right corner($A_{12} = 0$), meaning that $x_{2}$ does not have any business with $x_{1}$. Also, in $C$ we see that $C_{22} = 0$, which matches our intuition that we cannot observe $x_{2}$.
+\medskip
+
+For this we have: $\hat{A}_{11} = \alpha$, $\hat{A}_{21} = \beta$, $\hat{A}_{22} = 1$ and $\hat{C}_{1} = 2$, where $(\hat{A}_{11}, \hat{C}_{1})$ is completely observable. Just to have it clear, our \textbf{Observable Decomposition} is the same as the system in its original form:
+
+\[ \hat{A} = A =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+\]
+
+\[ \hat{C} = C =
+\begin{bmatrix}
+2 & 0
+\end{bmatrix}
+\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Question 4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+Let $A$, $B$, $C$ be given as in Question 1.2. Find the Kalman decomposition of this system . What is the McMillan degree of this system?
+
+\subsection*{Solution}
+From the previous solutions we know that $\Gamma$ has rank 2 (C.C.) and $\Omega$ has rank 1 ( not C.O.), so, the McMillan degree can be at most 1. Let's figure out. First, we find the basis for the 4 regions of $\Re^{n} $ (I liberally copy the results from questions 2 and 3):
+
+\[ \mathcal{R}(\Gamma) =  
+span \left \{
+\begin{bmatrix}
+1 \\ 
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\ 
+1
+\end{bmatrix}
+\right \}
+\]
+
+\[ \mathcal{R}(\Gamma)^{\perp} =  
+\emptyset
+\]
+
+\[
+\mathcal{N}(\Omega) : 
+span \left \{ 
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\right \}
+\]
+
+\[
+\mathcal{N}(\Omega)^{\perp} : 
+span \left \{ 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\right \}
+\]
+
+Finding our intersections:
+
+\[
+CO = span 
+\left \{
+\mathcal{R}(\Gamma) \cap \mathcal{N}(\Omega)^{\perp} \right \}
+=
+span 
+\left \{ 
+\begin{bmatrix}
+1 \\ 
+0
+\end{bmatrix} 
+\right \} 
+\]
+
+Notice that $dim(CO) = 1$, hence the \textbf{McMillan degree is $1$!}
+\medskip
+
+Let's go on:
+
+\[
+C\bar{O} = 
+span \left \{
+\mathcal{R}(\Gamma) \cap \mathcal{N}(\Omega)
+\right \}
+= 
+span
+\left \{
+\begin{bmatrix}
+0 \\ 
+1
+\end{bmatrix}  
+\right \}
+\]
+
+And for the last two guys, well, since $C$ is of rank 2:
+\[
+\bar{C}O = \bar{C}\bar{O} = \emptyset 
+\]
+
+Hence our transform $T$ is:
+
+\[
+T = 
+\begin{bmatrix}
+1 & 0\\ 
+0 & 1
+\end{bmatrix}  
+\]
+
+And, hum, finding $\hat{A}$ and $\hat{B}$ is quite straighforward:
+
+\[ \hat{A} = T^{-1}AT =
+\begin{bmatrix}
+\alpha & 0 \\
+\beta & 1
+\end{bmatrix}
+\]
+
+\[ \hat{B} = T^{-1}B =
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+\]
+
+\[ \hat{C} = CT =
+\begin{bmatrix}
+2 & 0
+\end{bmatrix}
+\]
+
+We only use $\hat{A}_{11}$, $\hat{B}_{1}$ and $\hat{C}_{1}$ since $\delta(G) = 1$, so our \textbf{minimal realization} is:
+
+\begin{center}
+\fbox{$\begin{matrix*}[l]
+\dot{\hat{x}}_{1} = \alpha \hat{x}_{1} + 1u \\
+y = 2\hat{x}_{1} 
+\end{matrix*}$}
+\end{center}
+
+And, just for fun, let's find the transfer function of our minimal representation above:
+
+\[ G(s) = C(sI - A)^{-1}B \]
+\[ G(s) = 2\times (sI - \alpha)^{-1}\times 1 \]
+\begin{center}
+\fbox{$G(s) = \dfrac{2}{s - \alpha}$}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Question 5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{}
+Let
+\[
+\dot{x} =
+\begin{bmatrix}
+1 & 1 \\
+0 & 1
+\end{bmatrix}
+x + 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+u
+\]
+
+For what values of $T>0$ (if any) is it possible to drive this system from
+
+\begin{center}
+$x(0) = \begin{bmatrix}0 \\ 1 \end{bmatrix}$ to $x(T) = \begin{bmatrix}2 \\ 2 \end{bmatrix}$ ?
+\end{center}
+
+\subsection*{Solution}
+First. let's check if the system is controllable:
+
+\begin{equation}
+\Gamma = \begin{bmatrix} B & AB \end{bmatrix}  = 
+\begin{bmatrix} 
+1 & 1 \\
+0 & 0 
+\end{bmatrix}
+\label{Eq:P5-GC}
+\end{equation}
+
+We can easily observe that $ \mathcal{R}(\Gamma) = 1$, so the system is not completely controllable. Still, we can explore if, under certain conditions, we can drive between the points specified. 
+\medskip
+
+From theory we know that we can drive from point $x_{0}$ to point $x_{1}$ if:
+
+\begin{equation}  
+x_{1} - \Phi(t_{1}, t_{0})x_{0} \in \mathcal{R}(\Gamma) 
+\label{Eq:P5-CCEq}
+\end{equation}
+
+Let's do some math, yay! First off, let's find $\Phi$. We know that:
+
+\[ \Phi(t_{1}, t_{0}) = e^{A(t_{1} - t_{0})} \]
+
+Looking at $A$, oh surprise, it looks like a Jordan block! So, to get the exponential is straightforward:
+
+\[ \Phi(t_{1}, t_{0}) = 
+\begin{bmatrix}
+e^{t_{1} - t_{0}} & (t_{1} - t_{0})e^{t_{1} - t_{0}} \\
+0 & e^{t_{1} - t_{0}}
+\end{bmatrix}
+\]
+
+Now we only need to find $\mathcal{R}(\Gamma)$, but that is an easy one. From (\ref{Eq:P5-GC}) we can see that:
+
+\[ \mathcal{R}(\Gamma) = 
+span
+\left \{
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\right \}
+\]
+
+So, now let's check for what values (\ref{Eq:P5-CCEq}) verifies. We replace the information that we got ( $t_{0} = 0$, $x_{0}$ and $x_{T}$):
+
+\[
+x_{1} - \Phi(t_{1}, t_{0})x_{0} =
+\begin{bmatrix}
+2 \\
+2
+\end{bmatrix}
+- 
+\begin{bmatrix}
+e^{T} & Te^{T} \\
+0 & e^{T}
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix} \]
+\[ 
+x_{1} - \Phi(t_{1}, t_{0})x_{0}
+=
+\begin{bmatrix}
+2 - Te^{T}\\
+2 - e^{T}
+\end{bmatrix}
+\]
+
+
+If we know that:
+
+\[ 
+x_{1} - \Phi(t_{1}, t_{0})x_{0}
+ \in 
+span
+\left \{
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\right \}
+\]
+
+Then: 
+
+\[ 
+\begin{bmatrix}
+2 - Te^{T}\\
+2 - e^{T}
+\end{bmatrix}
+\in 
+span
+\left \{
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\right \}
+\]
+
+The only way this can be true is if the last element in the left side is zero. Meaning:
+
+\[  2 - e^{T} = 0 \]
+
+Solving:
+\begin{center}
+\fbox{ $T = 0.693147$ sec }
+\end{center}
+\end{document}

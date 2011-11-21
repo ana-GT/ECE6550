@@ -1,0 +1,442 @@
+% LINEAR SYSTEMS AND CONTROL
+% Homework 1 : Realization, controllability, observability
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{trfsigns}
+\author{Ana Huaman}
+\title{Homework 1}
+\begin{document}
+\maketitle
+
+% Question 1 **************************
+\section{}
+Sometimes there is an additional term in the output of a linear system, which takes on the form 
+
+\[
+   \begin{matrix}
+   \dot{x} = Ax +Bu \\
+   y = Cx + Du
+   \end{matrix}
+\]
+
+What is the transfer function $G(s)$ for this type of system, where $Y(s) = G(s)U(s)$?
+
+\subsection*{Solution}
+Applying Laplace transform to both equations:
+\[
+  \begin{matrix}
+  sX(s) = AX(s) + BU(s) \\
+  Y(s) = CX(s) + DU(s)
+  \end{matrix} 
+\]
+
+From the first equation we find $X(s)$:
+\[ X(s) = (sI-A)^{-1}BU(s) \]
+
+Plugging this value in the second equation:
+\[ Y(s) = C(sI-A)^{-1}BU(s) + DU(s) \]
+\[ Y(s) = \left ( C(sI-A)^{-1}B + D \right ) U(s) \]
+\[ \dfrac{Y(s)}{U(s)} =  C(sI-A)^{-1}B + D \]
+\begin{center}
+\fbox{ $G(s) =  C(sI-A)^{-1}B + D$ }
+\end{center}
+
+
+% Question 2 **************************
+\section{}
+Consider the electrical network below
+
+Using our extensive circuits knowledge, we know that
+
+\[ y = x_{1} + C\dot{x_{2}} \]
+
+as well as that the following relationships hold for the two loops in the network
+\smallskip
+
+Loop 1:
+\[ u = Rx_{1} + L\dot{x_{1}} \]
+
+Loop 2:
+\[ u = RC\dot{x_{2}} + x_{2} \]
+
+Find a state space realization of this system
+
+\subsection*{Solution}
+Let's order the state equations properly:
+
+\[ \dot{x_{1}} = \frac{-R}{L}x_{1} + \frac{1}{L}u  \]
+\[ \dot{x_{2}} = \frac{-1}{RC}x_{2} + \frac{1}{RC}u  \]
+
+And replace the second equation in the expression for $y$:
+\[ y = x_{1} +  C\dot{x_{2}} \]
+\[ y = x_{1} +  \frac{-1}{R}x_{2} + \frac{1}{R}u \]
+
+Now we are done!
+\begin{center}
+\fbox{
+$
+ \dot{x} 
+ =
+ \begin{bmatrix}
+ \frac{-R}{L} & 0 \\
+ 0 & \frac{-1}{RC}
+ \end{bmatrix}
+ x
+ + 
+ \begin{bmatrix}
+ \frac{1}{L}  \\
+ \frac{1}{RC} 
+ \end{bmatrix}
+ u $ }
+\end{center}
+
+\begin{center}
+\fbox{ 
+$
+ y = 
+ \begin{bmatrix}
+ 1 &  \dfrac{-1}{R}
+ \end{bmatrix}
+ x
+ + 
+ \begin{bmatrix} 
+ \dfrac{1}{R}
+ \end{bmatrix}
+ u
+$ }
+\end{center}
+
+
+
+% Question 3 **************************
+\section{}
+Let
+\[ y^{(4)} + 7y^{(3)} - 16\ddot{y} + 3\dot{y} + 12y = 2u - \dot{u} - 4u^{(3)} \]
+
+\subsection*{a}
+Find the Controllable Canonical Realization of this system
+\subsubsection*{Solution}
+Let's solve it (we have the formula nicely written in our notebooks but it is good to do it old-style once in a while).
+\smallskip
+
+Take the Laplace transform:
+\[ s^{4}Y(s) + 7s^{3}Y(s) - 16s^{2}Y(s) + 3sY(s) + 12Y(s) = 2U(s) - sU(s) - 4s^{3}U(s) \]
+\[ ( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )Y(s) = ( 2 - s - 4s^{3} )U(s) \]
+\[ Y(s) = \dfrac{( 2 - s - 4s^{3} )}{( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )} U(s)\]
+\[ Y(s) = ( 2 - s - 4s^{3} ) \cdot \dfrac{1}{( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )} U(s)\]
+
+Let's divide the whole thing:
+
+\[ Y(s) = G_{1}(s) \cdot G_{2}(s) \cdot U(s) \]
+where:
+\[ \begin{matrix}
+G_{1}(s) = 2 - s - 4s^{3} \\
+G_{2}(s) = \dfrac{1}{( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )} 
+\end{matrix} \]
+
+If:
+\[ Z(s) = G_{2}(s)U(s) \]
+\[ Y(s) = G_{1}(s)Z(s) \]
+
+Finding $Z(s)$:
+\[ Z(s) = \dfrac{1}{( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )} \cdot U(s) \]
+\[ ( s^{4} + 7s^{3} - 16s^{2} + 3s + 12 )Z(s) = U(s) \]
+
+Applying inverse Laplace Transform:
+\[ z^{(4)} + 7z^{(3)} - 16\ddot{z} + 3\dot{z} + 12z = u \]
+
+Considering: 
+\begin{equation} 
+\begin{matrix}
+  x_{1} = z & x_{2} = \dot{z} & x_{3} = \ddot{z} & x_{4} = z^{(3)} 
+  \end{matrix}
+\label{eq:3_1}   
+\end{equation}
+
+we get:
+\begin{center}
+\fbox{
+$\begin{bmatrix}
+\dot{x_{1}} \\
+\dot{x_{2}} \\
+\dot{x_{3}} \\
+\dot{x_{4}} 
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+-12 & -3 & 16 & -7
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2} \\
+x_{3} \\
+x_{4} 
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+1 
+\end{bmatrix}
+u
+$ }
+\end{center}
+
+And now we find $y$:
+
+\[ Y(s) = G_{1}(s)Z(s) \]
+\[ Y(s) = ( 2 - s - 4s^{3} )Z(s)\]
+\[ y = 2z - \dot{z} - 4z^{(3)} \]
+
+From Eq.(\ref{eq:3_1}), let's replace:
+\[ y = 2x_{1} - x_{2} - 4x_{4} \]
+
+And we finally get $y$ in terms of $x$:
+\begin{center}
+\fbox{
+$y = 
+\begin{bmatrix}
+2 & -1  & 0 & -4
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2} \\
+x_{3} \\
+x_{4} 
+\end{bmatrix}$
+}
+\end{center}
+
+
+\subsection*{b}
+Find the Observable Canonical Realization of the system
+\subsubsection*{Solution}
+Now, this looks interesting! Let's check the original Differential Equation:
+
+\[ y^{(4)} + 7y^{(3)} - 16\ddot{y} + 3\dot{y} + 12y = 2u - \dot{u} - 4u^{(3)} \]
+\[ y^{(4)} = 2u - \dot{u} - 4u^{(3)} -7y^{(3)} + 16\ddot{y} - 3\dot{y} - 12y  \]
+
+Arranging properly:
+\[ y^{(4)} = - 4u^{(3)} -7y^{(3)} + 16\ddot{y} - \dot{u} - 3\dot{y} + 2u - 12y  \]
+
+Now, let's be violent. Take integrals to both sides such that we get $y$:
+
+\[ \iiiint y^{(4)}dt = \iiiint (- 4u^{(3)} -7y^{(3)} + 16\ddot{y} - \dot{u} - 3\dot{y} + 2u - 12y )dt \]
+
+Assuming initial conditions zero:
+
+\[ y = \int \left ( -4u - 7y + \int \left ( 16y + \int \left ( -u-3y + \int (2u-12y) \right  ) \right ) \right ) \]
+
+Now:
+\smallskip
+
+Set: $x_{1} = y$
+\medskip
+
+Set: $x_{4} = \int (2u-12y) $
+\smallskip
+
+$ \dot{x_{4}} = 2u-12y \rightarrow$ \fbox{ $\dot{x_{4}} = -12x_{1} + 2u$ }
+\medskip
+
+Set: $x_{3} = \int (-u-3y + x_{4}) $
+\smallskip
+
+$ \dot{x_{3}} = -u-3y + x_{4} \rightarrow$ \fbox{ $\dot{x_{3}} = -3x_{1} + x_{4} -u$ }
+
+Set: $x_{2} = \int (16y + x_{3}) $
+\smallskip
+
+$ \dot{x_{2}} = 16y + x_{3} \rightarrow$ \fbox{ $\dot{x_{2}} = 16x_{1} + x_{3} $ }
+\medskip
+
+Find $\dot{x_{1}}$:
+$ x_{1} = y = \int (- 4u - 7y + x_{2}) \rightarrow$ \fbox{ $\dot{x_{1}} = -7x_{1} + x_{2} - 4u $ }
+
+So, our system is now:
+\begin{center}
+\fbox{
+$\dot{x} 
+=
+\begin{bmatrix}
+-7 & 1 & 0 & 0 \\
+16 & 0 & 1 & 0 \\
+-3 & 0 & 0 & 1 \\
+-12 & 0 & 0 & 0
+\end{bmatrix}
+x
++
+\begin{bmatrix}
+-4 \\
+0 \\
+-1 \\
+2
+\end{bmatrix}
+u
+$ }
+\end{center}
+
+and the output:
+
+\begin{center}
+\fbox{
+$y = 
+\begin{bmatrix}
+1 & 0  & 0 & 0
+\end{bmatrix}
+x$ }
+\end{center}
+
+
+% Question 4 **************************
+\section{}
+A so-called unicycle model of a mobile robot states that
+
+\[
+\begin{matrix}
+\dot{x_{1}} = u_{1}\cos(x_{3}) \\
+\dot{x_{2}} = u_{1}\sin(x_{3}) \\
+\dot{x_{3}} = u_{2}
+\end{matrix}
+\]
+
+where $(x_{1}, x_{2})$ is the position of the robot, $x_{3}$ is its orientation, $u_{1}$ is its velocity and $u_{2}$ the angular velocity.
+
+\subsection*{a}
+Linearize this system around $(x_{1}, x_{2}, x_{3}) = (0,0, \dfrac{\pi}{2})$ and $(u_{1},u_{2}) = (0,0)$ in order to obtain a linear state space model.
+\subsection*{Solution}
+All right, from classes we know that to linearize the system, we will have to calculate an approximation such as
+
+\[ A = \dfrac{\partial f}{\partial x} \Big |_{x_{0}, u_{0}} \]
+\[ B = \dfrac{\partial f}{\partial u} \Big |_{x_{0}, u_{0}} \]
+\[ C = \dfrac{\partial h}{\partial x} \Big |_{x_{0}} \]
+
+From the equations above and from the fact that we probably want to be able to control the position as well as the orientation of the robot:
+
+\[ f = 
+\begin{bmatrix}
+u_{1}\cos(x_{3}) \\
+u_{1}\sin(x_{3}) \\
+u_{2}
+\end{bmatrix}
+\]
+
+\[ h = 
+\begin{bmatrix}
+x_{1}  \\
+x_{2}  \\
+x_{3}
+\end{bmatrix}
+\]
+
+Using the equations above, let's do some derivations:
+
+\[ A = 
+\begin{bmatrix}
+0 & 0 & -u_{1}\sin(x_{3}) \\
+0 & 0 & u_{1}\cos(x_{3}) \\
+0 & 0 & 0
+\end{bmatrix}
+\]
+
+\[ B = 
+\begin{bmatrix}
+\cos(x_{3}) & 0 \\
+\sin(x_{3}) & 0 \\
+0 & 1
+\end{bmatrix}
+\]
+
+\[ C =
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+Evaluating it around $(x_{1}, x_{2}, x_{3}) = (0,0, \dfrac{\pi}{2})$ and $(u_{1},u_{2}) = (0,0)$:
+
+\[ A = 
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\]
+
+\[ B = 
+\begin{bmatrix}
+0 & 0 \\
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\]
+
+\[ C =
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+
+\subsection*{b}
+Without worrrying too much about the  technical definition, a system is controllable if it is possible to drive the system between any two states (by picking a suitably clever input signal). Is the system in {\bf 4.a} controllable?
+\subsection*{Solution}
+The unicycle (as it is presented in this question) is controllable. To achieve any combination of position $+$ orientation, the control input should be in its simplest form a combination of three steps: rotation + translation + rotation.
+\medskip
+ 
+Let's say that we want to get to position $(x_{G},y_{G})$ with orientation $\theta_{G}$. What we would do would be:
+
+\begin{itemize}
+\item{Rotate our robot so our new orientation is $\tan^{-1}(y_{G}/x_{G})$}
+\item{Translate forward until reaching the position  $(x_{G},y_{G})$}
+\item{Rotate in our place until we reach the desired orientation $\theta_{G}$}
+\end{itemize}
+
+If we want to get fancy we might prove this by Non-Linear Controllability theory, but I don't know that much yet (only read it out of curiosity because of this problem), in any case, I would like to write it down so I will remember it in the future:
+
+Let's check the non-linear controllability matrix: 
+\[
+\begin{bmatrix}
+\cos \theta & 0 & \sin \theta \\
+\sin \theta & 0 & -\cos \theta \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+The two first columns come from $g(x)$, which in turns comes from $\dot{x} = g_{1}(x)u_{1} + g_{2}(x)u_{2}$. The third column comes from the Lie bracket:
+
+\[ [g_{1}, g_{2}] = \dfrac{\partial g_{2}}{\partial x} g_{1} - \dfrac{\partial g_{1}}{\partial x} g_{2} = 
+\begin{bmatrix}
+\sin \theta \\
+- \cos \theta \\
+0
+\end{bmatrix}
+\] 
+
+With some quick math we can verify that the rank of this matrix is $r = n = 3$ ( $n$ the number of states). Hence, the system is controllable.
+
+% Question 5 **************************
+\section{}
+Control systems can be found everywhere. Look around you and list 5 everyday devices that require control for their operation (By control, I mean they have to measure something and then change their dynamics, i.e. what they are doing, accordingly)
+\subsection*{Solution}
+\begin{itemize}
+\item{ Outdoor lighting: Most of us have this installed at home. The lights turn on (change) when movement is detected nearby (input)}
+\item{ Automatic Sprinkler : Having as an input a sensorial signal that indicates that the environment is dry, the system changes and turn on the water sprinkler when needed.}
+\item{ Automatic doors: You see them everyday when you go to Publix. When the presence of a person is detected nearby, the door opens automatically, then closes when you go away. }
+\item{ Your car: The input would come from the wheel (for orientation) and from the gas pedal for speed (acceleration). The system changes accordingly.}
+\item{ An oven: You manipulate the handle to indicate the temperature and the oven changes the temperature based on the new handle position}
+\item{ Your shower: You have hot or cold water by rotating the handle. Depending on how much you rotate the tap, the water temperature will be different.}
+\end{itemize}
+\end{document}
